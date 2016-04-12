@@ -1,0 +1,83 @@
+<!-- <html>
+<head>
+	<h1>One Eye Alert </h1>
+</head>
+<body>
+	<h3>Alert on Cam {{cam}} at {{timestamp}}</h3>
+		<div style="float:left;">
+			<h3>Camera Grab</h3>
+			<img src="{{ MEDIA_URL }}frames/{{frame}}" width="300px"/>
+		</div>
+		<div style="float:left;margin-left:10">
+			<h3>Mug Shot</h3>
+			<img src="{{ MEDIA_URL }}mugshots/{{mug}}" width="300px"/>
+		</div>
+	
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<title>OneEye Alert</title>
+	<style>
+	html, body, #map-canvas {
+		height: 100%;
+		margin: 0px;
+		padding: 0px
+	}
+	</style>
+	<script src="http://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script>
+// This example displays a marker at the center of Australia.
+// When the user clicks the marker, an info window opens.
+
+function initialize() {
+	var myLatlng = new google.maps.LatLng(17.473006,78.373831);
+	var mapOptions = {
+		zoom: 18,
+		center: myLatlng
+	};
+
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+	var contentString = 
+	
+	'<div style="float:left;">'  +
+	'<h3>Camera Grab</h3>' + 
+	'<img src="{{ MEDIA_URL }}frames/{{frame}}" width="300px" height="300px"/>' + 
+	'</div>' + 
+	'<div style="float:left;margin-left:10">' +
+	'<h3>Mug Shot</h3>' + 
+	'<img src="{{ MEDIA_URL }}mugshots/{{mug}}" width="300px" height="300px" />' +
+	'</div>' +
+	'</div>' +
+	'<h3>Alert on Cam {{cam}} at {{timestamp}}</h3>' ;
+
+	var infowindow = new google.maps.InfoWindow({
+		content: contentString,
+		maxHeight:500
+	});
+
+	var marker = new google.maps.Marker({
+		position: myLatlng,
+		map: map,
+		title: 'OneEye : Alert Detected in Camera {{cam}}'
+	});
+	infowindow.open(map,marker);
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.open(map,marker);
+	});
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+</head>
+<body>
+	<div id="map-canvas"></div>
+</body>
+</html>
